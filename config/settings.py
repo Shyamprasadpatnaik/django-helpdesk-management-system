@@ -94,13 +94,24 @@ ASGI_APPLICATION = 'config.asgi.application'
 AUTH_USER_MODEL = 'accounts.User'
 
 # Database Configuration (MySQL / SQLite fallback via .env)
-USE_SQLITE = os.environ.get('USE_SQLITE', 'False').lower() in ('true', '1', 'yes')
+IS_VERCEL = 'VERCEL' in os.environ
+
+# On Vercel without external DB configured, automatically fallback to /tmp/db.sqlite3
+if IS_VERCEL and not os.environ.get('DB_HOST'):
+    USE_SQLITE = True
+else:
+    USE_SQLITE = os.environ.get('USE_SQLITE', 'False').lower() in ('true', '1', 'yes')
 
 if USE_SQLITE:
+    if IS_VERCEL:
+        import tempfile
+        db_path = Path(tempfile.gettempdir()) / 'db.sqlite3'
+    else:
+        db_path = BASE_DIR / 'db.sqlite3'
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'NAME': db_path,
         }
     }
 else:
@@ -146,7 +157,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
 
 # Media files (Uploads, Attachments, Proofs)
 MEDIA_URL = '/media/'
