@@ -1,0 +1,30 @@
+{% extends "emails/base_email.html" %}
+
+{% block content %}
+<h2>Ticket Update: {{ ticket.ticket_number }}</h2>
+<p>Hello <strong>{{ recipient_name }}</strong>,</p>
+<p>There has been a status update or new activity on ticket <strong>{{ ticket.ticket_number }}</strong>.</p>
+
+<div class="ticket-card">
+    <div class="ticket-row">
+        <span class="ticket-label">Ticket ID:</span>
+        <span class="ticket-val">{{ ticket.ticket_number }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Issue:</span>
+        <span class="ticket-val">{{ ticket.title }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Updated Status:</span>
+        <span class="ticket-val"><strong>{{ ticket.get_status_display }}</strong></span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Updated By:</span>
+        <span class="ticket-val">{{ updated_by }}</span>
+    </div>
+</div>
+
+<p><strong>Update Details:</strong><br>{{ message }}</p>
+
+<a href="{{ ticket_url }}" class="btn-action">View Ticket Conversation</a>
+{% endblock %}

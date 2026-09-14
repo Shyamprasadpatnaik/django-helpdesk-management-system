@@ -1,0 +1,1254 @@
+[
+{
+  "model": "sessions.session",
+  "pk": "q2pagfz79d5p95ojr5os0dpxvnbxsp1a",
+  "fields": {
+    "session_data": ".eJxVTkkOwiAUvQtrQyh0oC7dewby-YPUoU0oXRnvLk260NVL3vxWAbaSwrZyDhOps2rU6ZeLgA-ed4HuMN8Wjctc8hT1btGHuurrQvy8HN6_ggRrqmmhkVCYLEsvbWts3_NgvUX0riEzRt8KRBids0zoETsnxC4O1nRYw7V0XwYsoaJM-cX1VMkbf74gG0Kb:1x627U:UqjZpc7oyIXvVoWUFUFGr_kOAD0LqujNWwn03gL3Z_k",
+    "expire_date": "2026-09-28T08:32:56.758Z"
+  }
+},
+{
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$HVORVzggtBaoNFdni6b0Zd$t/U7QogrjyRsWrXRuKDnDRp9lC1a98xcs5izIOPuDws=",
+    "last_login": "2026-09-14T08:32:29.114Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "Chief",
+    "last_name": "Administrator",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-09-14T08:15:12.727Z",
+    "employee_id": "EMP-0001",
+    "email": "admin@company.com",
+    "phone": "9348009036",
+    "department": null,
+    "role": "SUPER_ADMIN",
+    "designation": "Chief Information Officer",
+    "location": "Corporate HQ / Plant Control Center",
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$VhFpu6vq2esWiA58Wmo71x$bpzuOOPkJwoOApMKiwa3ymQsIKzAxxUpRbKTqTv+MYM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "hr_admin",
+    "first_name": "Sunita",
+    "last_name": "Sharma",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-09-14T08:15:13.904Z",
+    "employee_id": "EMP-1001",
+    "email": "hr@company.com",
+    "phone": null,
+    "department": 1,
+    "role": "HR_ADMIN",
+    "designation": "Helpdesk & HR Incharge",
+    "location": "Admin Block, Room 102",
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$Lo7hrSP2eK8YXGIV8phsIH$0DXj1eVOId8R32vDjPTGkNsU3FgkyMTAhpA8/quAa8M=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "prod_manager",
+    "first_name": "Rajesh",
+    "last_name": "Patel",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-09-14T08:15:15.419Z",
+    "employee_id": "EMP-4001",
+    "email": "manager.prod@company.com",
+    "phone": null,
+    "department": 3,
+    "role": "DEPT_MANAGER",
+    "designation": "Production General Manager",
+    "location": "Paper Mill #2 Central Office",
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$kidhe8SRfY40dts4Per4u4$Px/F9lxkOo7jufkqitTwqr8gdkrv0juD9XbHp9l+sLA=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "technician",
+    "first_name": "Ramesh",
+    "last_name": "Kumar",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-09-14T08:15:16.858Z",
+    "employee_id": "EMP-2001",
+    "email": "technician@company.com",
+    "phone": null,
+    "department": 4,
+    "role": "TECHNICIAN",
+    "designation": "Senior Maintenance Technician",
+    "location": "Maintenance Workshop Bay A",
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$XzBzwoBvHIMTffYlzGyx5K$/sPTdNCTm16+fjTUGF59eTiPANefdCEw2nqtPaZaCqY=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "elec_tech",
+    "first_name": "Anil",
+    "last_name": "Verma",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-09-14T08:15:18.393Z",
+    "employee_id": "EMP-2002",
+    "email": "technician.elec@company.com",
+    "phone": null,
+    "department": 5,
+    "role": "TECHNICIAN",
+    "designation": "Electrical & Drives Technician",
+    "location": "Electrical Workshop Bay B",
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$LiOVBSVl16dyOBaAfo1fYf$zpbgxMUGh7E3clHjyfKteO6HXFwCR0p4A9lwlDg/zak=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "employee",
+    "first_name": "P.",
+    "last_name": "Shyamprasad",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-09-14T08:15:19Z",
+    "employee_id": "EMP-3001",
+    "email": "employee@company.com",
+    "phone": null,
+    "department": 3,
+    "role": "EMPLOYEE",
+    "designation": "Paper Machine Operator",
+    "location": "Paper Machine #1 Operating Floor",
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.technicianprofile",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "technician"
+    ],
+    "specialization": "Hydraulics, Bearings, Paper Machine Drive Mechanics",
+    "is_available": true,
+    "max_concurrent_tickets": 5,
+    "created_at": "2026-09-14T08:15:18.377Z",
+    "updated_at": "2026-09-14T08:15:21.508Z",
+    "departments": [
+      4,
+      6,
+      3
+    ]
+  }
+},
+{
+  "model": "accounts.technicianprofile",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "elec_tech"
+    ],
+    "specialization": "VFD Inverters, Induction Motors, 415V Switchgear",
+    "is_available": true,
+    "max_concurrent_tickets": 5,
+    "created_at": "2026-09-14T08:15:19.930Z",
+    "updated_at": "2026-09-14T08:15:21.532Z",
+    "departments": [
+      5,
+      7
+    ]
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 1,
+  "fields": {
+    "name": "Human Resources",
+    "code": "HR",
+    "description": "Employee welfare, recruitment, payroll, and benefits",
+    "manager": [
+      "hr_admin"
+    ],
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.051Z",
+    "updated_at": "2026-09-14T08:15:21.484Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 2,
+  "fields": {
+    "name": "IT",
+    "code": "IT",
+    "description": "Network infrastructure, servers, workstations, software, and printing systems",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.063Z",
+    "updated_at": "2026-09-14T08:15:12.064Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 3,
+  "fields": {
+    "name": "Production",
+    "code": "PROD",
+    "description": "Pulp preparation, paper machines, finishing and packaging lines",
+    "manager": [
+      "prod_manager"
+    ],
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.075Z",
+    "updated_at": "2026-09-14T08:15:21.473Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 4,
+  "fields": {
+    "name": "Maintenance",
+    "code": "MAINT",
+    "description": "Plant-wide mechanical maintenance, preventive inspection, and repairs",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.098Z",
+    "updated_at": "2026-09-14T08:15:12.098Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 5,
+  "fields": {
+    "name": "Electrical",
+    "code": "ELEC",
+    "description": "High/medium voltage substations, motor control centers, and drives",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.112Z",
+    "updated_at": "2026-09-14T08:15:12.112Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 6,
+  "fields": {
+    "name": "Mechanical",
+    "code": "MECH",
+    "description": "Heavy rotating equipment, gearboxes, pumps, and pipework",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.125Z",
+    "updated_at": "2026-09-14T08:15:12.125Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 7,
+  "fields": {
+    "name": "Instrumentation",
+    "code": "INST",
+    "description": "Process automation, DCS sensors, transmitters, and valves",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.140Z",
+    "updated_at": "2026-09-14T08:15:12.140Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 8,
+  "fields": {
+    "name": "Quality Control",
+    "code": "QC",
+    "description": "Paper grade testing, moisture, tensile, and opacity compliance",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.151Z",
+    "updated_at": "2026-09-14T08:15:12.151Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 9,
+  "fields": {
+    "name": "Research & Development",
+    "code": "RD",
+    "description": "Fiber engineering, chemical recovery, and green energy innovations",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.164Z",
+    "updated_at": "2026-09-14T08:15:12.165Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 10,
+  "fields": {
+    "name": "Finance",
+    "code": "FIN",
+    "description": "Budgeting, auditing, and corporate finance",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.190Z",
+    "updated_at": "2026-09-14T08:15:12.190Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 11,
+  "fields": {
+    "name": "Accounts",
+    "code": "ACCT",
+    "description": "Vendor invoices, ledgers, and billing reconciliation",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.202Z",
+    "updated_at": "2026-09-14T08:15:12.202Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 12,
+  "fields": {
+    "name": "Administration",
+    "code": "ADMIN",
+    "description": "Facility management, cafeteria, and housekeeping services",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.219Z",
+    "updated_at": "2026-09-14T08:15:12.219Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 13,
+  "fields": {
+    "name": "Security",
+    "code": "SEC",
+    "description": "Plant gate access, surveillance, and loss prevention",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.236Z",
+    "updated_at": "2026-09-14T08:15:12.236Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 14,
+  "fields": {
+    "name": "Stores",
+    "code": "STORES",
+    "description": "Spare parts inventory, engineering consumables, and tools",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.255Z",
+    "updated_at": "2026-09-14T08:15:12.255Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 15,
+  "fields": {
+    "name": "Procurement",
+    "code": "PROC",
+    "description": "Raw wood pulp, chemicals, and equipment purchasing",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.270Z",
+    "updated_at": "2026-09-14T08:15:12.270Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 16,
+  "fields": {
+    "name": "Sales",
+    "code": "SALES",
+    "description": "Domestic and international paper roll dispatches",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.290Z",
+    "updated_at": "2026-09-14T08:15:12.290Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 17,
+  "fields": {
+    "name": "Marketing",
+    "code": "MKTG",
+    "description": "Corporate communication and client brand coordination",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.309Z",
+    "updated_at": "2026-09-14T08:15:12.309Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 18,
+  "fields": {
+    "name": "Safety",
+    "code": "SAFE",
+    "description": "Occupational health, fire response, PPE, and OSHA compliance",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.326Z",
+    "updated_at": "2026-09-14T08:15:12.326Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 19,
+  "fields": {
+    "name": "Environment",
+    "code": "ENV",
+    "description": "Effluent treatment, boiler emissions, and water recovery",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.344Z",
+    "updated_at": "2026-09-14T08:15:12.344Z"
+  }
+},
+{
+  "model": "departments.department",
+  "pk": 20,
+  "fields": {
+    "name": "Transport",
+    "code": "TRANS",
+    "description": "Plant fleet, logistics vehicles, and forklift management",
+    "manager": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.363Z",
+    "updated_at": "2026-09-14T08:15:12.363Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 1,
+  "fields": {
+    "department": 2,
+    "name": "Computer problem",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.388Z",
+    "updated_at": "2026-09-14T08:15:12.388Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 2,
+  "fields": {
+    "department": 2,
+    "name": "Network problem",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.407Z",
+    "updated_at": "2026-09-14T08:15:12.407Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 3,
+  "fields": {
+    "department": 2,
+    "name": "Software problem",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.431Z",
+    "updated_at": "2026-09-14T08:15:12.431Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 4,
+  "fields": {
+    "department": 2,
+    "name": "Printer problem",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.456Z",
+    "updated_at": "2026-09-14T08:15:12.456Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 5,
+  "fields": {
+    "department": 2,
+    "name": "Email problem",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.466Z",
+    "updated_at": "2026-09-14T08:15:12.466Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 6,
+  "fields": {
+    "department": 2,
+    "name": "Internet problem",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.475Z",
+    "updated_at": "2026-09-14T08:15:12.475Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 7,
+  "fields": {
+    "department": 2,
+    "name": "Hardware problem",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.482Z",
+    "updated_at": "2026-09-14T08:15:12.482Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 8,
+  "fields": {
+    "department": 4,
+    "name": "Machine problem",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.490Z",
+    "updated_at": "2026-09-14T08:15:12.490Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 9,
+  "fields": {
+    "department": 4,
+    "name": "Equipment problem",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.498Z",
+    "updated_at": "2026-09-14T08:15:12.498Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 10,
+  "fields": {
+    "department": 4,
+    "name": "Building issue",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.505Z",
+    "updated_at": "2026-09-14T08:15:12.505Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 11,
+  "fields": {
+    "department": 4,
+    "name": "Plumbing",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.515Z",
+    "updated_at": "2026-09-14T08:15:12.515Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 12,
+  "fields": {
+    "department": 4,
+    "name": "Valve leak",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.523Z",
+    "updated_at": "2026-09-14T08:15:12.523Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 13,
+  "fields": {
+    "department": 4,
+    "name": "Bearing failure",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.533Z",
+    "updated_at": "2026-09-14T08:15:12.533Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 14,
+  "fields": {
+    "department": 5,
+    "name": "Motor trip",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.542Z",
+    "updated_at": "2026-09-14T08:15:12.542Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 15,
+  "fields": {
+    "department": 5,
+    "name": "Power outage",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.554Z",
+    "updated_at": "2026-09-14T08:15:12.554Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 16,
+  "fields": {
+    "department": 5,
+    "name": "Control panel fault",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.566Z",
+    "updated_at": "2026-09-14T08:15:12.566Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 17,
+  "fields": {
+    "department": 5,
+    "name": "Lighting failure",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.574Z",
+    "updated_at": "2026-09-14T08:15:12.574Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 18,
+  "fields": {
+    "department": 5,
+    "name": "VFD drive fault",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.583Z",
+    "updated_at": "2026-09-14T08:15:12.583Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 19,
+  "fields": {
+    "department": 3,
+    "name": "Production equipment",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.590Z",
+    "updated_at": "2026-09-14T08:15:12.590Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 20,
+  "fields": {
+    "department": 3,
+    "name": "Production process",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.599Z",
+    "updated_at": "2026-09-14T08:15:12.599Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 21,
+  "fields": {
+    "department": 3,
+    "name": "Safety issue",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.608Z",
+    "updated_at": "2026-09-14T08:15:12.608Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 22,
+  "fields": {
+    "department": 3,
+    "name": "Machine downtime",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.617Z",
+    "updated_at": "2026-09-14T08:15:12.617Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 23,
+  "fields": {
+    "department": 3,
+    "name": "Sheet break",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.626Z",
+    "updated_at": "2026-09-14T08:15:12.626Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 24,
+  "fields": {
+    "department": 1,
+    "name": "Employee issue",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.637Z",
+    "updated_at": "2026-09-14T08:15:12.637Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 25,
+  "fields": {
+    "department": 1,
+    "name": "Attendance",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.643Z",
+    "updated_at": "2026-09-14T08:15:12.643Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 26,
+  "fields": {
+    "department": 1,
+    "name": "Payroll",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.650Z",
+    "updated_at": "2026-09-14T08:15:12.650Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 27,
+  "fields": {
+    "department": 1,
+    "name": "Leave",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.658Z",
+    "updated_at": "2026-09-14T08:15:12.658Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 28,
+  "fields": {
+    "department": 1,
+    "name": "Employee documentation",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.671Z",
+    "updated_at": "2026-09-14T08:15:12.671Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 29,
+  "fields": {
+    "department": 1,
+    "name": "Health insurance",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.682Z",
+    "updated_at": "2026-09-14T08:15:12.682Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 30,
+  "fields": {
+    "department": 18,
+    "name": "Hazardous condition",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.692Z",
+    "updated_at": "2026-09-14T08:15:12.692Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 31,
+  "fields": {
+    "department": 18,
+    "name": "Fire extinguisher check",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.698Z",
+    "updated_at": "2026-09-14T08:15:12.698Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 32,
+  "fields": {
+    "department": 18,
+    "name": "Chemical spill alert",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.705Z",
+    "updated_at": "2026-09-14T08:15:12.706Z"
+  }
+},
+{
+  "model": "departments.ticketcategory",
+  "pk": 33,
+  "fields": {
+    "department": 18,
+    "name": "PPE request",
+    "description": null,
+    "is_active": true,
+    "created_at": "2026-09-14T08:15:12.714Z",
+    "updated_at": "2026-09-14T08:15:12.714Z"
+  }
+},
+{
+  "model": "tickets.ticketpriority",
+  "pk": 1,
+  "fields": {
+    "name": "CRITICAL",
+    "sla_hours": 1,
+    "warning_threshold_percent": 75,
+    "color_code": "#ef4444",
+    "badge_class": "badge-danger",
+    "order": 1
+  }
+},
+{
+  "model": "tickets.ticketpriority",
+  "pk": 2,
+  "fields": {
+    "name": "HIGH",
+    "sla_hours": 4,
+    "warning_threshold_percent": 75,
+    "color_code": "#f97316",
+    "badge_class": "badge-warning",
+    "order": 2
+  }
+},
+{
+  "model": "tickets.ticketpriority",
+  "pk": 3,
+  "fields": {
+    "name": "MEDIUM",
+    "sla_hours": 12,
+    "warning_threshold_percent": 75,
+    "color_code": "#eab308",
+    "badge_class": "badge-info",
+    "order": 3
+  }
+},
+{
+  "model": "tickets.ticketpriority",
+  "pk": 4,
+  "fields": {
+    "name": "LOW",
+    "sla_hours": 24,
+    "warning_threshold_percent": 75,
+    "color_code": "#3b82f6",
+    "badge_class": "badge-primary",
+    "order": 4
+  }
+},
+{
+  "model": "tickets.ticket",
+  "pk": 1,
+  "fields": {
+    "ticket_number": "TKT-2026-000001",
+    "title": "Production Paper Machine 2 Drive Motor Abnormal Vibration",
+    "description": "During high-speed reeling, the main drive motor is producing high-frequency vibration and abnormal whining sound. Production speed reduced by 30%.",
+    "created_by": [
+      "employee"
+    ],
+    "department": 3,
+    "category": 19,
+    "priority": 2,
+    "status": "IN_PROGRESS",
+    "building": "Paper Machine Section #2",
+    "floor": "Ground Floor",
+    "room_area": "Dry End Drive Section",
+    "equipment_number": "PM2-MTR-01",
+    "assigned_to": [
+      "technician"
+    ],
+    "created_at": "2026-09-14T08:15:21.571Z",
+    "updated_at": "2026-09-14T08:15:21.571Z",
+    "due_at": "2026-09-14T10:15:21.550Z",
+    "resolved_at": null,
+    "closed_at": null,
+    "resolution_summary": null,
+    "employee_confirmation": "PENDING",
+    "reopened_count": 0,
+    "escalation_level": 0,
+    "sla_breached": false,
+    "sla_warning_sent": false
+  }
+},
+{
+  "model": "tickets.ticket",
+  "pk": 2,
+  "fields": {
+    "ticket_number": "TKT-2026-000002",
+    "title": "Hydraulic Oil Pressure Drop on Press Section Rollers",
+    "description": "Secondary nip press accumulator was losing pressure under load. Oil level low.",
+    "created_by": [
+      "employee"
+    ],
+    "department": 4,
+    "category": 8,
+    "priority": 3,
+    "status": "RESOLVED",
+    "building": "Paper Mill #1",
+    "floor": "Operating Deck",
+    "room_area": "Press Section Bay 2",
+    "equipment_number": "PM1-HYD-03",
+    "assigned_to": [
+      "technician"
+    ],
+    "created_at": "2026-09-14T08:15:21.641Z",
+    "updated_at": "2026-09-14T08:15:21.642Z",
+    "due_at": "2026-09-14T12:15:21.625Z",
+    "resolved_at": "2026-09-14T07:30:21.625Z",
+    "closed_at": null,
+    "resolution_summary": "Replaced worn high-pressure hydraulic hose line, topped up ISO VG 68 oil, and tested under 120 bar pressure. No leaks detected.",
+    "employee_confirmation": "PENDING",
+    "reopened_count": 0,
+    "escalation_level": 0,
+    "sla_breached": false,
+    "sla_warning_sent": false
+  }
+},
+{
+  "model": "tickets.ticket",
+  "pk": 3,
+  "fields": {
+    "ticket_number": "TKT-2026-000003",
+    "title": "Substation 2 Main Transformer Breaker Trip",
+    "description": "Total blackout across chemical recovery boiler feed pumps. Urgent power restoration needed.",
+    "created_by": [
+      "employee"
+    ],
+    "department": 5,
+    "category": 15,
+    "priority": 1,
+    "status": "ESCALATED",
+    "building": "Power House",
+    "floor": "Substation 2",
+    "room_area": "Transformer Yard Bay 1",
+    "equipment_number": "TR-02-11KV",
+    "assigned_to": [
+      "elec_tech"
+    ],
+    "created_at": "2026-09-14T08:15:21.675Z",
+    "updated_at": "2026-09-14T08:15:21.676Z",
+    "due_at": "2026-09-14T06:15:21.659Z",
+    "resolved_at": null,
+    "closed_at": null,
+    "resolution_summary": null,
+    "employee_confirmation": "PENDING",
+    "reopened_count": 0,
+    "escalation_level": 1,
+    "sla_breached": true,
+    "sla_warning_sent": true
+  }
+},
+{
+  "model": "tickets.ticket",
+  "pk": 4,
+  "fields": {
+    "ticket_number": "TKT-2026-000004",
+    "title": "Control Room DCS Display #4 Screen Flickering and Freezing",
+    "description": "Honeywell DCS workstation display intermittently blanks out during paper reel changeovers.",
+    "created_by": [
+      "employee"
+    ],
+    "department": 2,
+    "category": 1,
+    "priority": 4,
+    "status": "NEW",
+    "building": "Main Plant Control Tower",
+    "floor": "3rd Floor",
+    "room_area": "Central DCS Room",
+    "equipment_number": "DCS-WS-04",
+    "assigned_to": null,
+    "created_at": "2026-09-14T08:15:21.708Z",
+    "updated_at": "2026-09-14T08:15:21.708Z",
+    "due_at": "2026-09-15T07:45:21.691Z",
+    "resolved_at": null,
+    "closed_at": null,
+    "resolution_summary": null,
+    "employee_confirmation": "PENDING",
+    "reopened_count": 0,
+    "escalation_level": 0,
+    "sla_breached": false,
+    "sla_warning_sent": false
+  }
+},
+{
+  "model": "tickets.ticketassignment",
+  "pk": 1,
+  "fields": {
+    "ticket": 1,
+    "technician": [
+      "technician"
+    ],
+    "assigned_by": [
+      "hr_admin"
+    ],
+    "assigned_at": "2026-09-14T08:15:21.582Z",
+    "accepted_at": "2026-09-14T06:45:21.581Z",
+    "completed_at": null,
+    "notes": "Inspect vibration levels with portable FFT analyzer. Check coupling alignment.",
+    "status": "ACCEPTED"
+  }
+},
+{
+  "model": "tickets.tickethistory",
+  "pk": 1,
+  "fields": {
+    "ticket": 1,
+    "changed_by": [
+      "employee"
+    ],
+    "action": "Ticket Created",
+    "old_value": null,
+    "new_value": "NEW",
+    "details": "Ticket logged by operator.",
+    "timestamp": "2026-09-14T08:15:21.592Z"
+  }
+},
+{
+  "model": "tickets.tickethistory",
+  "pk": 2,
+  "fields": {
+    "ticket": 1,
+    "changed_by": [
+      "hr_admin"
+    ],
+    "action": "Technician Assigned",
+    "old_value": null,
+    "new_value": "ASSIGNED",
+    "details": "Assigned to Ramesh Kumar.",
+    "timestamp": "2026-09-14T08:15:21.601Z"
+  }
+},
+{
+  "model": "tickets.tickethistory",
+  "pk": 3,
+  "fields": {
+    "ticket": 1,
+    "changed_by": [
+      "technician"
+    ],
+    "action": "Assignment Accepted",
+    "old_value": null,
+    "new_value": "IN_PROGRESS",
+    "details": "Technician arrived on site with vibration meter.",
+    "timestamp": "2026-09-14T08:15:21.611Z"
+  }
+},
+{
+  "model": "notifications.smslog",
+  "pk": 1,
+  "fields": {
+    "recipient_phone": "9348009036",
+    "recipient_name": "Chief Administrator",
+    "message": "[JK Paper Mill] Welcome to JK Paper Mill Ticket Alerts! You will now receive instant SMS updates for all ticket responses and resolutions.",
+    "ticket_number": null,
+    "channel": "SMS",
+    "status": "SENT",
+    "error_message": null,
+    "sent_at": "2026-09-14T08:32:56.748Z"
+  }
+},
+{
+  "model": "chatbot.chatbotconversation",
+  "pk": 1,
+  "fields": {
+    "session_id": "bef33278-5f58-4fb4-b41d-b42ab9648629",
+    "user": [
+      "admin"
+    ],
+    "title": "Issue Troubleshooting Session",
+    "created_at": "2026-09-14T08:51:58.448Z",
+    "updated_at": "2026-09-14T08:51:58.448Z"
+  }
+},
+{
+  "model": "chatbot.chatbotconversation",
+  "pk": 2,
+  "fields": {
+    "session_id": "3fc8ee2f-b03f-4464-9353-6f6a40af2956",
+    "user": [
+      "admin"
+    ],
+    "title": "Issue Troubleshooting Session",
+    "created_at": "2026-09-14T08:52:13.046Z",
+    "updated_at": "2026-09-14T08:52:13.046Z"
+  }
+},
+{
+  "model": "chatbot.chatbotconversation",
+  "pk": 3,
+  "fields": {
+    "session_id": "c3d9f4f6-1731-43b4-8641-b1a703422fe4",
+    "user": [
+      "admin"
+    ],
+    "title": "Issue Troubleshooting Session",
+    "created_at": "2026-09-14T08:52:26.032Z",
+    "updated_at": "2026-09-14T08:52:26.032Z"
+  }
+},
+{
+  "model": "chatbot.chatbotconversation",
+  "pk": 4,
+  "fields": {
+    "session_id": "76157b99-eb91-4b34-afe0-f6b0fac21624",
+    "user": [
+      "admin"
+    ],
+    "title": "Issue Troubleshooting Session",
+    "created_at": "2026-09-14T08:52:29.094Z",
+    "updated_at": "2026-09-14T08:52:29.094Z"
+  }
+},
+{
+  "model": "chatbot.chatmessage",
+  "pk": 1,
+  "fields": {
+    "conversation": 2,
+    "role": "user",
+    "content": "can u give me he datails of employees",
+    "created_at": "2026-09-14T08:52:13.102Z"
+  }
+},
+{
+  "model": "chatbot.chatmessage",
+  "pk": 2,
+  "fields": {
+    "conversation": 2,
+    "role": "assistant",
+    "content": "I have analyzed your query. For best resolution, please ensure you check physical power and basic connectivity. If the issue persists, I recommend creating a formal support ticket with photos or error details so the relevant department technician can inspect it.",
+    "created_at": "2026-09-14T08:52:13.111Z"
+  }
+},
+{
+  "model": "chatbot.chatmessage",
+  "pk": 3,
+  "fields": {
+    "conversation": 3,
+    "role": "user",
+    "content": "g",
+    "created_at": "2026-09-14T08:52:26.088Z"
+  }
+},
+{
+  "model": "chatbot.chatmessage",
+  "pk": 4,
+  "fields": {
+    "conversation": 3,
+    "role": "assistant",
+    "content": "I have analyzed your query. For best resolution, please ensure you check physical power and basic connectivity. If the issue persists, I recommend creating a formal support ticket with photos or error details so the relevant department technician can inspect it.",
+    "created_at": "2026-09-14T08:52:26.099Z"
+  }
+},
+{
+  "model": "chatbot.chatmessage",
+  "pk": 5,
+  "fields": {
+    "conversation": 4,
+    "role": "user",
+    "content": "f",
+    "created_at": "2026-09-14T08:52:29.158Z"
+  }
+},
+{
+  "model": "chatbot.chatmessage",
+  "pk": 6,
+  "fields": {
+    "conversation": 4,
+    "role": "assistant",
+    "content": "I have analyzed your query. For best resolution, please ensure you check physical power and basic connectivity. If the issue persists, I recommend creating a formal support ticket with photos or error details so the relevant department technician can inspect it.",
+    "created_at": "2026-09-14T08:52:29.170Z"
+  }
+},
+{
+  "model": "audit.auditlog",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "CONTACT_VERIFIED",
+    "ticket_number": null,
+    "ip_address": "127.0.0.1",
+    "details": "Employee verified alert contact details (Email: admin@company.com, Phone: 9348009036).",
+    "created_at": "2026-09-14T08:32:56.740Z"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2026-09-14T08:49:40.551Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "accounts",
+      "user"
+    ],
+    "object_id": "6",
+    "object_repr": "EMP-3001 - P. Shyamprasad (Employee)",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+}
+]

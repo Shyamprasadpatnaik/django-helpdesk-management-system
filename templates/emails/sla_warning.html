@@ -1,0 +1,34 @@
+{% extends "emails/base_email.html" %}
+
+{% block content %}
+<h2>SLA Threshold Warning (75% Elapsed)</h2>
+<p>Hello <strong>{{ recipient_name }}</strong>,</p>
+<p>This is an automated warning that ticket <strong>{{ ticket.ticket_number }}</strong> has reached 75% of its allotted resolution timeframe without being resolved.</p>
+
+<div class="ticket-card">
+    <div class="ticket-row">
+        <span class="ticket-label">Ticket ID:</span>
+        <span class="ticket-val">{{ ticket.ticket_number }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Issue:</span>
+        <span class="ticket-val">{{ ticket.title }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Assigned To:</span>
+        <span class="ticket-val">{{ ticket.assigned_to.display_name|default:"Unassigned" }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Priority:</span>
+        <span class="ticket-val"><span class="badge {{ ticket.priority.badge_class }}">{{ ticket.priority.name }}</span></span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">SLA Deadline:</span>
+        <span class="ticket-val"><strong style="color: #b45309;">{{ ticket.due_at|date:"d M Y, H:i" }}</strong></span>
+    </div>
+</div>
+
+<p>Please expedite resolution to prevent an automated SLA breach and management escalation.</p>
+
+<a href="{{ ticket_url }}" class="btn-action">Take Immediate Action</a>
+{% endblock %}

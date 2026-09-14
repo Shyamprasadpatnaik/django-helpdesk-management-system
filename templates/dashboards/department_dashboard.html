@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Department Manager Dashboard - JK Paper Mill{% endblock %}
+
+{% block content %}
+<div class="card-header-flex">
+    <div>
+        <h1 style="font-size: 20px; font-weight: 800;">
+            Department Command: {{ request.user.department.name|default:"Operating Unit" }}
+        </h1>
+        <p class="card-subtitle">Equipment downtime tracking, team problem reports, and technician progress</p>
+    </div>
+    <a href="{% url 'ticket_create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> Report Department Issue
+    </a>
+</div>
+
+<!-- Department Metrics -->
+<div class="metrics-grid">
+    <div class="metric-card card-primary">
+        <div class="metric-data">
+            <h3>{{ total_tickets }}</h3>
+            <p>Total Dept Tickets</p>
+        </div>
+        <div class="metric-icon">
+            <i class="bi bi-folder-fill"></i>
+        </div>
+    </div>
+    <div class="metric-card card-warning">
+        <div class="metric-data">
+            <h3>{{ open_tickets }}</h3>
+            <p>Open Issues</p>
+        </div>
+        <div class="metric-icon icon-warning">
+            <i class="bi bi-hourglass-split"></i>
+        </div>
+    </div>
+    <div class="metric-card card-info">
+        <div class="metric-data">
+            <h3>{{ in_progress }}</h3>
+            <p>Technician Visiting</p>
+        </div>
+        <div class="metric-icon icon-info">
+            <i class="bi bi-tools"></i>
+        </div>
+    </div>
+    <div class="metric-card card-danger">
+        <div class="metric-data">
+            <h3>{{ critical_issues }}</h3>
+            <p>Critical / High</p>
+        </div>
+        <div class="metric-icon icon-danger">
+            <i class="bi bi-exclamation-octagon-fill"></i>
+        </div>
+    </div>
+    <div class="metric-card card-success">
+        <div class="metric-data">
+            <h3>{{ resolved }}</h3>
+            <p>Resolved</p>
+        </div>
+        <div class="metric-icon icon-success">
+            <i class="bi bi-check2-circle"></i>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Department Tickets -->
+<div class="card-box">
+    <div class="card-header-flex">
+        <div>
+            <h2 class="card-title">Recent Department Issues & Downtime Reports</h2>
+            <p class="card-subtitle">Real-time status of repairs on plant floor</p>
+        </div>
+        <a href="{% url 'ticket_list' %}" class="btn btn-sm btn-secondary">All Department Tickets</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Ticket ID</th>
+                    <th>Issue Description</th>
+                    <th>Equipment / Tag</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Assigned Tech</th>
+                    <th>Reported By</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in recent_tickets %}
+                <tr>
+                    <td><strong>{{ t.ticket_number }}</strong></td>
+                    <td style="font-weight: 600;">{{ t.title }}</td>
+                    <td>{{ t.equipment_number|default:"N/A" }}</td>
+                    <td><span class="badge {{ t.priority_badge_class }}">{{ t.priority.name }}</span></td>
+                    <td><span class="badge {{ t.status_badge_class }}">{{ t.get_status_display }}</span></td>
+                    <td>{{ t.assigned_to.display_name|default:"Awaiting Assignment" }}</td>
+                    <td>{{ t.created_by.display_name }}</td>
+                    <td>{{ t.created_at|date:"d M Y, H:i" }}</td>
+                    <td>
+                        <a href="{% url 'ticket_detail' t.ticket_number %}" class="btn btn-sm btn-secondary">
+                            View Details
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="9" style="text-align: center; padding: 36px;" class="text-muted">
+                        No tickets reported for your department.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "emails/base_email.html" %}
+
+{% block content %}
+<h2>CRITICAL ALERT: Ticket Escalated</h2>
+<p>Hello <strong>{{ recipient_name }}</strong>,</p>
+<p>Ticket <strong>{{ ticket.ticket_number }}</strong> has been automatically escalated due to SLA violation or critical review requirements.</p>
+
+<div class="ticket-card">
+    <div class="ticket-row">
+        <span class="ticket-label">Ticket ID:</span>
+        <span class="ticket-val"><strong style="color: #b91c1c;">{{ ticket.ticket_number }}</strong></span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Issue:</span>
+        <span class="ticket-val">{{ ticket.title }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Department:</span>
+        <span class="ticket-val">{{ ticket.department.name }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Priority:</span>
+        <span class="ticket-val"><span class="badge badge-danger">{{ ticket.priority.name }}</span></span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Escalation Level:</span>
+        <span class="ticket-val"><strong>Level {{ ticket.escalation_level }}</strong></span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Original SLA Deadline:</span>
+        <span class="ticket-val">{{ ticket.due_at|date:"d M Y, H:i" }}</span>
+    </div>
+</div>
+
+<p><strong>Reason for Escalation:</strong><br>{{ reason }}</p>
+
+<a href="{{ ticket_url }}" class="btn-action" style="background: #b91c1c;">Review & Intervene Immediately</a>
+{% endblock %}

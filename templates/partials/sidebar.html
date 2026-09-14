@@ -1,0 +1,148 @@
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <div class="brand-logo">JK</div>
+        <div class="brand-text">
+            <h2>JK Paper Mill</h2>
+            <p>Ticket Desk</p>
+        </div>
+    </div>
+
+    <div class="sidebar-menu">
+        <div class="menu-heading">Main Navigation</div>
+
+        <!-- Dashboard -->
+        <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            <i class="bi bi-grid-1x2-fill"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <!-- ROLE: EMPLOYEE -->
+        {% if request.user.is_employee %}
+            <a href="{% url 'ticket_create' %}" class="nav-link {% if request.resolver_match.url_name == 'ticket_create' %}active{% endif %}" style="color: #60a5fa; font-weight: 600;">
+                <i class="bi bi-plus-circle-fill"></i>
+                <span>Create New Ticket</span>
+            </a>
+            <a href="{% url 'ticket_list' %}" class="nav-link {% if request.resolver_match.url_name == 'ticket_list' %}active{% endif %}">
+                <i class="bi bi-ticket-detailed-fill"></i>
+                <span>My Tickets</span>
+            </a>
+            <a href="{% url 'chatbot_page' %}" class="nav-link {% if request.resolver_match.url_name == 'chatbot_page' %}active{% endif %}">
+                <i class="bi bi-robot"></i>
+                <span>AI Assistant</span>
+            </a>
+        {% endif %}
+
+        <!-- ROLE: HR / HELPDESK ADMIN -->
+        {% if request.user.is_hr_admin %}
+            <div class="menu-heading">Ticket Queues</div>
+            <a href="{% url 'ticket_list' %}" class="nav-link {% if request.resolver_match.url_name == 'ticket_list' and not request.GET.status %}active{% endif %}">
+                <i class="bi bi-inbox-fill"></i>
+                <span>All Tickets</span>
+            </a>
+            <a href="{% url 'ticket_list' %}?status=NEW" class="nav-link {% if request.GET.status == 'NEW' %}active{% endif %}">
+                <i class="bi bi-clock-fill text-warning"></i>
+                <span>New Tickets</span>
+            </a>
+            <a href="{% url 'ticket_list' %}?status=ASSIGNED" class="nav-link {% if request.GET.status == 'ASSIGNED' %}active{% endif %}">
+                <i class="bi bi-person-gear"></i>
+                <span>Assigned Queue</span>
+            </a>
+            <a href="{% url 'ticket_list' %}?status=ESCALATED" class="nav-link {% if request.GET.status == 'ESCALATED' %}active{% endif %}" style="color: #f87171;">
+                <i class="bi bi-exclamation-octagon-fill"></i>
+                <span>Escalated (SLA)</span>
+            </a>
+
+            <div class="menu-heading">Administration</div>
+            <a href="{% url 'department_list' %}" class="nav-link {% if request.resolver_match.url_name == 'department_list' %}active{% endif %}">
+                <i class="bi bi-building"></i>
+                <span>Departments</span>
+            </a>
+            <a href="{% url 'report_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'report_dashboard' %}active{% endif %}">
+                <i class="bi bi-bar-chart-line-fill"></i>
+                <span>Reports & Analytics</span>
+            </a>
+        {% endif %}
+
+        <!-- ROLE: DEPARTMENT MANAGER -->
+        {% if request.user.is_dept_manager %}
+            <div class="menu-heading">Department Oversight</div>
+            <a href="{% url 'ticket_list' %}" class="nav-link {% if request.resolver_match.url_name == 'ticket_list' %}active{% endif %}">
+                <i class="bi bi-card-checklist"></i>
+                <span>Department Tickets</span>
+            </a>
+            <a href="{% url 'report_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'report_dashboard' %}active{% endif %}">
+                <i class="bi bi-graph-up-arrow"></i>
+                <span>Dept Performance</span>
+            </a>
+        {% endif %}
+
+        <!-- ROLE: TECHNICIAN -->
+        {% if request.user.is_technician %}
+            <div class="menu-heading">Technician Tasks</div>
+            <a href="{% url 'ticket_list' %}" class="nav-link {% if request.resolver_match.url_name == 'ticket_list' and not request.GET.status %}active{% endif %}">
+                <i class="bi bi-tools"></i>
+                <span>My Assignments</span>
+            </a>
+            <a href="{% url 'ticket_list' %}?status=IN_PROGRESS" class="nav-link {% if request.GET.status == 'IN_PROGRESS' %}active{% endif %}">
+                <i class="bi bi-gear-wide-connected text-warning"></i>
+                <span>In Progress</span>
+            </a>
+            <a href="{% url 'ticket_list' %}?status=RESOLVED" class="nav-link {% if request.GET.status == 'RESOLVED' %}active{% endif %}">
+                <i class="bi bi-check2-all text-success"></i>
+                <span>Completed Tasks</span>
+            </a>
+        {% endif %}
+
+        <!-- ROLE: SUPER ADMIN -->
+        {% if request.user.is_super_admin %}
+            <div class="menu-heading">System Governance</div>
+            <a href="{% url 'user_list' %}" class="nav-link {% if request.resolver_match.url_name == 'user_list' %}active{% endif %}">
+                <i class="bi bi-people-fill"></i>
+                <span>Users & Roles</span>
+            </a>
+            <a href="{% url 'department_list' %}" class="nav-link {% if request.resolver_match.url_name == 'department_list' %}active{% endif %}">
+                <i class="bi bi-diagram-3-fill"></i>
+                <span>Departments</span>
+            </a>
+            <a href="{% url 'ticket_list' %}" class="nav-link {% if request.resolver_match.url_name == 'ticket_list' %}active{% endif %}">
+                <i class="bi bi-ticket-perforated-fill"></i>
+                <span>All Tickets</span>
+            </a>
+            <a href="{% url 'report_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'report_dashboard' %}active{% endif %}">
+                <i class="bi bi-pie-chart-fill"></i>
+                <span>Global Reports</span>
+            </a>
+            <a href="{% url 'audit_list' %}" class="nav-link {% if request.resolver_match.url_name == 'audit_list' %}active{% endif %}">
+                <i class="bi bi-shield-shaded"></i>
+                <span>Audit Logs</span>
+            </a>
+            <a href="/admin/" target="_blank" class="nav-link">
+                <i class="bi bi-sliders"></i>
+                <span>Django Admin <i class="bi bi-box-arrow-up-right" style="font-size: 10px;"></i></span>
+            </a>
+        {% endif %}
+
+        <div class="menu-heading">Account & Alerts</div>
+        <a href="{% url 'notification_list' %}" class="nav-link {% if request.resolver_match.url_name == 'notification_list' %}active{% endif %}">
+            <i class="bi bi-bell-fill"></i>
+            <span>Notifications</span>
+            {% if unread_notifications_count > 0 %}
+            <span class="badge badge-danger" style="margin-left: auto; font-size: 10px;">{{ unread_notifications_count }}</span>
+            {% endif %}
+        </a>
+        <a href="{% url 'profile' %}" class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+            <i class="bi bi-person-bounding-box"></i>
+            <span>My Profile</span>
+        </a>
+    </div>
+
+    <div class="sidebar-footer">
+        <div class="user-avatar-sm">
+            {{ request.user.first_name|first|default:request.user.username|first|upper }}
+        </div>
+        <div class="sidebar-user-info">
+            <div class="sidebar-user-name">{{ request.user.display_name }}</div>
+            <div class="sidebar-user-role">{{ request.user.employee_id }} | {{ request.user.get_role_display }}</div>
+        </div>
+    </div>
+</aside>

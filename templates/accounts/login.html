@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sign In - JK Paper Mill Ticket Portal{% endblock %}
+
+{% block auth_content %}
+<div class="login-card-container">
+    <div class="login-card">
+        
+        <!-- Corporate Brand Header -->
+        <div class="login-header">
+            <div class="login-brand-crest">
+                <i class="bi bi-shield-check"></i>
+            </div>
+            <h1 class="login-title">JK Paper Mill</h1>
+            <p class="login-subtitle">Enterprise Ticket & Service Management</p>
+            <div>
+                <span class="system-status-indicator">
+                    <span class="system-status-dot"></span>
+                    Helpdesk Services Active
+                </span>
+            </div>
+        </div>
+
+        <!-- In-card System Messages (e.g. Login Errors) -->
+        {% include "partials/messages.html" %}
+
+        <!-- Quick 1-Click Demo Role Selector -->
+        <div class="quick-demo-section">
+            <div class="quick-demo-title">
+                <span><i class="bi bi-lightning-charge-fill text-warning"></i> Quick Demo Access</span>
+                <span class="quick-demo-badge-active" id="active-role-indicator">Select role to auto-fill</span>
+            </div>
+            <div class="role-pills-container">
+                <button type="button" class="role-pill-btn" onclick="selectRole('admin@company.com', 'password123', 'Super Admin', this)">
+                    <i class="bi bi-shield-shaded text-danger"></i>
+                    <span>Admin</span>
+                </button>
+                <button type="button" class="role-pill-btn" onclick="selectRole('hr@company.com', 'password123', 'HR Desk', this)">
+                    <i class="bi bi-headset text-primary"></i>
+                    <span>HR Desk</span>
+                </button>
+                <button type="button" class="role-pill-btn" onclick="selectRole('manager.prod@company.com', 'password123', 'Dept Manager', this)">
+                    <i class="bi bi-briefcase text-warning"></i>
+                    <span>Manager</span>
+                </button>
+                <button type="button" class="role-pill-btn" onclick="selectRole('technician@company.com', 'password123', 'Technician', this)">
+                    <i class="bi bi-tools text-info"></i>
+                    <span>Technician</span>
+                </button>
+                <button type="button" class="role-pill-btn active" onclick="selectRole('employee@company.com', 'password123', 'Employee', this)">
+                    <i class="bi bi-person-workspace text-success"></i>
+                    <span>Employee</span>
+                </button>
+                <button type="button" class="role-pill-btn" onclick="clearFields(this)">
+                    <i class="bi bi-arrow-counterclockwise text-secondary"></i>
+                    <span>Clear</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Login Form -->
+        <form method="POST" action="{% url 'login' %}" id="loginForm">
+            {% csrf_token %}
+            {% if request.GET.next %}
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+            {% endif %}
+
+            <!-- Username / Employee ID / Email -->
+            <div style="margin-bottom: 18px;">
+                <div class="form-label-custom">
+                    <label for="login-username">Employee ID / Email / Username</label>
+                </div>
+                <div class="input-with-icon-group">
+                    <i class="bi bi-person input-icon-prefix"></i>
+                    <input type="text" 
+                           name="username" 
+                           id="login-username" 
+                           class="form-control" 
+                           placeholder="e.g. employee@company.com or EMP-1001" 
+                           value="employee@company.com" 
+                           required 
+                           autofocus>
+                </div>
+            </div>
+
+            <!-- Password -->
+            <div style="margin-bottom: 16px;">
+                <div class="form-label-custom">
+                    <label for="login-password">Password</label>
+                    <a href="javascript:void(0)" onclick="alert('For password resets or credential assistance, please contact the Internal IT Helpdesk at Extension 4401 or email it.support@company.com.')" style="font-size: 11.5px; color: var(--primary);">
+                        Forgot Password?
+                    </a>
+                </div>
+                <div class="input-with-icon-group">
+                    <i class="bi bi-lock input-icon-prefix"></i>
+                    <input type="password" 
+                           name="password" 
+                           id="login-password" 
+                           class="form-control" 
+                           placeholder="Enter your password" 
+                           value="password123" 
+                           required>
+                    <button type="button" 
+                            class="password-toggle-btn" 
+                            id="togglePasswordBtn" 
+                            onclick="togglePasswordVisibility()" 
+                            title="Show/Hide Password" 
+                            aria-label="Toggle password visibility">
+                        <i class="bi bi-eye" id="passwordToggleIcon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Remember Me Row -->
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-muted); cursor: pointer;">
+                    <input type="checkbox" name="remember" style="accent-color: var(--primary); cursor: pointer;" checked>
+                    Remember my credentials
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary login-submit-btn">
+                <span>Sign In to Portal</span>
+                <i class="bi bi-arrow-right"></i>
+            </button>
+        </form>
+
+        <!-- Help & Information -->
+        <div class="login-footer-info">
+            <span>Need new employee access? </span>
+            <a href="javascript:void(0)" onclick="alert('New employee accounts are provisioned via HR onboarding. Please contact your department manager or HR representative.')">Contact HR Desk</a>
+        </div>
+
+        <!-- Security Badge -->
+        <div class="login-security-tag">
+            <i class="bi bi-shield-lock-fill"></i>
+            <span>Encrypted Session &bull; JK Paper Mill Internal Use Only</span>
+        </div>
+    </div>
+</div>
+
+<script>
+function selectRole(username, password, roleName, el) {
+    const userField = document.getElementById('login-username');
+    const pwdField = document.getElementById('login-password');
+    const indicator = document.getElementById('active-role-indicator');
+    
+    userField.value = username;
+    pwdField.value = password;
+    
+    // Highlight active pill
+    document.querySelectorAll('.role-pill-btn').forEach(btn => btn.classList.remove('active'));
+    if (el) el.classList.add('active');
+    
+    if (indicator) {
+        indicator.textContent = `Selected: ${roleName}`;
+    }
+}
+
+function clearFields(el) {
+    document.getElementById('login-username').value = '';
+    document.getElementById('login-password').value = '';
+    document.querySelectorAll('.role-pill-btn').forEach(btn => btn.classList.remove('active'));
+    if (el) el.classList.add('active');
+    const indicator = document.getElementById('active-role-indicator');
+    if (indicator) indicator.textContent = 'Custom credentials';
+    document.getElementById('login-username').focus();
+}
+
+function togglePasswordVisibility() {
+    const pwdInput = document.getElementById('login-password');
+    const icon = document.getElementById('passwordToggleIcon');
+    if (!pwdInput) return;
+
+    if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        icon.classList.remove('bi-eye');
+        icon.classList.add('bi-eye-slash');
+    } else {
+        pwdInput.type === 'password';
+        pwdInput.setAttribute('type', 'password');
+        icon.classList.remove('bi-eye-slash');
+        icon.classList.add('bi-eye');
+    }
+}
+</script>
+{% endblock %}

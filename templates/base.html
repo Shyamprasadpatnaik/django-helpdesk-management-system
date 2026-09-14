@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}JK Paper Mill - Ticket Management System{% endblock %}</title>
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Chart.js for enterprise dashboards -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- Enterprise Design System CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="app-container">
+        {% if request.user.is_authenticated %}
+            {% include "partials/sidebar.html" %}
+            <div class="main-wrapper">
+                {% include "partials/navbar.html" %}
+                <main class="content-body">
+                    {% include "partials/messages.html" %}
+                    {% block content %}{% endblock %}
+                </main>
+            </div>
+            
+            <!-- Floating AI Triage Assistant FAB -->
+            <a href="{% url 'chatbot_page' %}" class="chatbot-fab" title="AI Troubleshooting Assistant">
+                <i class="bi bi-robot"></i>
+            </a>
+        {% else %}
+            <!-- Unauthenticated Layout (e.g. Login) -->
+            <main class="auth-main-wrapper">
+                {% block auth_content %}{% endblock %}
+            </main>
+        {% endif %}
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

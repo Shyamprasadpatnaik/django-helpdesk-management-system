@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Bad Request - JK Paper Mill{% endblock %}
+
+{% block content %}
+<div class="card-box" style="text-align: center; padding: 60px 20px; max-width: 600px; margin: 40px auto;">
+    <div style="font-size: 64px; color: var(--warning); margin-bottom: 16px;">
+        <i class="bi bi-slash-circle-fill"></i>
+    </div>
+    <h2 style="font-size: 24px; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">400 - Bad Request</h2>
+    <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">
+        The system could not process this request due to invalid parameters or malformed data.
+    </p>
+    <a href="{% url 'dashboard' %}" class="btn btn-primary">
+        <i class="bi bi-house-door-fill"></i> Return to Dashboard
+    </a>
+</div>
+{% endblock %}

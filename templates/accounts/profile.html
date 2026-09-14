@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - JK Paper Mill{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div class="card-header-flex">
+        <div>
+            <h1 style="font-size: 20px; font-weight: 800;">My Employee Profile</h1>
+            <p class="card-subtitle">Manage your personal contact details, desk location, and credentials</p>
+        </div>
+        <span class="badge {{ request.user.role_badge_class }}" style="font-size: 13px; padding: 6px 12px;">
+            {{ request.user.get_role_display }}
+        </span>
+    </div>
+
+    <div class="card-box">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                <div>
+                    <label style="font-size: 12.5px; font-weight: 600; display: block; margin-bottom: 6px;">Employee ID</label>
+                    <input type="text" class="form-control" value="{{ request.user.employee_id }}" disabled style="background: #f1f5f9; cursor: not-allowed;">
+                    <small class="text-muted" style="font-size: 11px;">Managed by HR Administration</small>
+                </div>
+                <div>
+                    <label style="font-size: 12.5px; font-weight: 600; display: block; margin-bottom: 6px;">Assigned Department</label>
+                    <input type="text" class="form-control" value="{{ request.user.department.name|default:'Corporate' }}" disabled style="background: #f1f5f9; cursor: not-allowed;">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                <div>
+                    <label style="font-size: 12.5px; font-weight: 600; display: block; margin-bottom: 6px;">First Name</label>
+                    {{ form.first_name }}
+                </div>
+                <div>
+                    <label style="font-size: 12.5px; font-weight: 600; display: block; margin-bottom: 6px;">Last Name</label>
+                    {{ form.last_name }}
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                <div>
+                    <label style="font-size: 12.5px; font-weight: 600; display: block; margin-bottom: 6px;">Official Email</label>
+                    {{ form.email }}
+                </div>
+                <div>
+                    <label style="font-size: 12.5px; font-weight: 600; display: block; margin-bottom: 6px;">Intercom / Mobile Phone</label>
+                    {{ form.phone }}
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 12.5px; font-weight: 600; display: block; margin-bottom: 6px;">Plant / Office Location</label>
+                {{ form.location }}
+                <small class="text-muted" style="font-size: 11px;">e.g. Paper Machine 1 Control Room, Rayagada Plant</small>
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <label style="font-size: 12.5px; font-weight: 600; display: block; margin-bottom: 6px;">Profile Photo</label>
+                {{ form.avatar }}
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save"></i> Save Profile Changes
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

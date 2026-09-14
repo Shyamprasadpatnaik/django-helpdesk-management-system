@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics & Export Reports - JK Paper Mill{% endblock %}
+
+{% block content %}
+<div class="card-header-flex">
+    <div>
+        <h1 style="font-size: 20px; font-weight: 800;">Plant Analytics & SLA Compliance Reports</h1>
+        <p class="card-subtitle">Generate management summaries, export spreadsheets, and monitor cross-department SLAs</p>
+    </div>
+    <!-- Export Action Buttons -->
+    <div style="display: flex; gap: 8px;">
+        <a href="{% url 'report_export_csv' %}?{{ request.GET.urlencode }}" class="btn btn-secondary">
+            <i class="bi bi-filetype-csv text-success"></i> Export CSV
+        </a>
+        <a href="{% url 'report_export_excel' %}?{{ request.GET.urlencode }}" class="btn btn-secondary">
+            <i class="bi bi-file-earmark-excel text-success"></i> Export Excel
+        </a>
+        <a href="{% url 'report_export_pdf' %}?{{ request.GET.urlencode }}" class="btn btn-secondary">
+            <i class="bi bi-file-earmark-pdf text-danger"></i> Export PDF
+        </a>
+    </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="card-box" style="padding: 16px 20px;">
+    <form method="GET" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+        <div>
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 3px;">From Date</label>
+            <input type="date" name="date_from" value="{{ date_from }}" class="form-control" style="width: 140px; font-size: 12.5px;">
+        </div>
+        <div>
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 3px;">To Date</label>
+            <input type="date" name="date_to" value="{{ date_to }}" class="form-control" style="width: 140px; font-size: 12.5px;">
+        </div>
+        <div>
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 3px;">Department</label>
+            <select name="department" class="form-select" style="width: 160px; font-size: 12.5px;">
+                <option value="">All</option>
+                {% for d in departments %}
+                <option value="{{ d.id }}" {% if selected_dept == d.id|stringformat:"s" %}selected{% endif %}>{{ d.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 3px;">Priority</label>
+            <select name="priority" class="form-select" style="width: 130px; font-size: 12.5px;">
+                <option value="">All</option>
+                {% for p in priorities %}
+                <option value="{{ p.id }}" {% if selected_priority == p.id|stringformat:"s" %}selected{% endif %}>{{ p.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 3px;">Status</label>
+            <select name="status" class="form-select" style="width: 140px; font-size: 12.5px;">
+                <option value="">All</option>
+                {% for code, name in statuses %}
+                <option value="{{ code }}" {% if selected_status == code %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 3px;">Technician</label>
+            <select name="technician" class="form-select" style="width: 160px; font-size: 12.5px;">
+                <option value="">All</option>
+                {% for t in technicians %}
+                <option value="{{ t.id }}" {% if selected_tech == t.id|stringformat:"s" %}selected{% endif %}>{{ t.display_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="align-self: flex-end;">
+            <button type="submit" class="btn btn-primary" style="padding: 8px 16px;">
+                <i class="bi bi-funnel"></i> Generate Report
+            </button>
+            {% if selected_dept or selected_priority or selected_status or selected_tech or date_from or date_to %}
+            <a href="{% url 'report_dashboard' %}" class="btn btn-secondary" style="padding: 8px 12px;">Reset</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+
+<!-- Metric Overview -->
+<div class="metrics-grid">
+    <div class="metric-card card-primary">
+        <div class="metric-data">
+            <h3>{{ total_count }}</h3>
+            <p>Total Ticket Volume</p>
+        </div>
+        <div class="metric-icon">
+            <i class="bi bi-bar-chart-fill"></i>
+        </div>
+    </div>
+    <div class="metric-card card-success">
+        <div class="metric-data">
+            <h3>{{ resolved_count }}</h3>
+            <p>Resolved Tickets</p>
+        </div>
+        <div class="metric-icon icon-success">
+            <i class="bi bi-check2-all"></i>
+        </div>
+    </div>
+    <div class="metric-card card-danger">
+        <div class="metric-data">
+            <h3>{{ breached_count }}</h3>
+            <p>SLA Violations</p>
+        </div>
+        <div class="metric-icon icon-danger">
+            <i class="bi bi-exclamation-octagon-fill"></i>
+        </div>
+    </div>
+    <div class="metric-card card-info">
+        <div class="metric-data">
+            <h3>{{ sla_compliance_rate }}%</h3>
+            <p>SLA Compliance Rate</p>
+        </div>
+        <div class="metric-icon icon-info">
+            <i class="bi bi-shield-check"></i>
+        </div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+    <!-- Department Breakdown Table -->
+    <div class="card-box" style="margin-bottom: 0;">
+        <h2 class="card-title" style="margin-bottom: 14px;">Department Performance Breakdown</h2>
+        <div class="table-responsive">
+            <table class="custom-table" style="font-size: 12.5px;">
+                <thead>
+                    <tr>
+                        <th>Department</th>
+                        <th>Total Logged</th>
+                        <th>Active Open</th>
+                        <th>SLA Breached</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for d in dept_stats %}
+                    {% if d.total > 0 %}
+                    <tr>
+                        <td><strong>{{ d.name }}</strong></td>
+                        <td>{{ d.total }}</td>
+                        <td>{{ d.open }}</td>
+                        <td>
+                            {% if d.breached > 0 %}
+                            <span class="badge badge-danger">{{ d.breached }}</span>
+                            {% else %}
+                            <span class="badge badge-success">0</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Common Issue Categories -->
+    <div class="card-box" style="margin-bottom: 0;">
+        <h2 class="card-title" style="margin-bottom: 14px;">Most Common Issues & Categories</h2>
+        <div class="table-responsive">
+            <table class="custom-table" style="font-size: 12.5px;">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Occurrences</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cat in common_categories %}
+                    <tr>
+                        <td><strong>{{ cat.category__name }}</strong></td>
+                        <td><span class="badge badge-primary">{{ cat.count }} tickets</span></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" style="text-align: center; padding: 24px;" class="text-muted">No data available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

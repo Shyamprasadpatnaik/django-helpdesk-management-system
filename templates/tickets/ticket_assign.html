@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Assign Technician - {{ ticket.ticket_number }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 860px; margin: 0 auto;">
+    <div class="card-header-flex">
+        <div>
+            <h1 style="font-size: 20px; font-weight: 800;">Technician Assignment & Workload Balancing</h1>
+            <p class="card-subtitle">Dispatch maintenance, IT, or electrical engineers based on workload and plant location</p>
+        </div>
+        <a href="{% url 'ticket_detail' ticket.ticket_number %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Ticket
+        </a>
+    </div>
+
+    <!-- Ticket Summary Card -->
+    <div class="card-box" style="background: #f8fafc; border-left: 4px solid var(--primary); padding: 18px 24px; margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <strong style="font-size: 15px; color: var(--primary);">{{ ticket.ticket_number }}</strong>
+            <span class="badge {{ ticket.priority_badge_class }}">{{ ticket.priority.name }} Priority</span>
+        </div>
+        <h3 style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">{{ ticket.title }}</h3>
+        <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 10px;">{{ ticket.description|truncatechars:180 }}</p>
+        <div style="font-size: 12px; color: var(--text-muted); display: flex; gap: 16px;">
+            <span><i class="bi bi-building"></i> Dept: <strong>{{ ticket.department.name }}</strong></span>
+            <span><i class="bi bi-geo-alt"></i> Location: <strong>{{ ticket.building|default:"Main Plant" }}</strong></span>
+            <span><i class="bi bi-person"></i> Reporter: <strong>{{ ticket.created_by.display_name }}</strong></span>
+        </div>
+    </div>
+
+    <!-- Assignment Form -->
+    <div class="card-box">
+        <form method="POST">
+            {% csrf_token %}
+
+            <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 14px;">Select Technician</h3>
+
+            <!-- Technician Workload Selector Table -->
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 8px;">
+                    Select Recommended Specialist *
+                </label>
+                {{ form.technician }}
+            </div>
+
+            <!-- Technicians Workload Table for HR Reference -->
+            <div style="margin-bottom: 24px; background: #fafafa; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 16px;">
+                <h4 style="font-size: 12.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px;">
+                    Available Technicians & Active Workload Radar
+                </h4>
+                <div class="table-responsive">
+                    <table class="custom-table" style="font-size: 12px;">
+                        <thead>
+                            <tr>
+                                <th>Technician</th>
+                                <th>Specialization</th>
+                                <th>Current Active Tickets</th>
+                                <th>Availability Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tech in technicians %}
+                            <tr>
+                                <td>
+                                    <strong>{{ tech.display_name }}</strong> ({{ tech.employee_id }})
+                                </td>
+                                <td>{{ tech.technician_profile.specialization|default:"General Maintenance" }}</td>
+                                <td>
+                                    <strong>{{ tech.technician_profile.current_workload }}</strong> active tickets
+                                </td>
+                                <td>
+                                    <span class="badge {% if tech.technician_profile.current_workload >= 4 %}badge-danger{% elif tech.technician_profile.current_workload > 0 %}badge-warning{% else %}badge-success{% endif %}">
+                                        {{ tech.technician_profile.workload_status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px;">
+                    Adjust Priority (Optional)
+                </label>
+                {{ form.priority }}
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px;">
+                    Work Instructions / Notes for Technician
+                </label>
+                {{ form.notes }}
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <a href="{% url 'ticket_detail' ticket.ticket_number %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="bi bi-person-check-fill"></i> Confirm & Dispatch Assignment
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

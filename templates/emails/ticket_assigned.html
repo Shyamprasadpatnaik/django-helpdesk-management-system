@@ -1,0 +1,44 @@
+{% extends "emails/base_email.html" %}
+
+{% block content %}
+<h2>Ticket Assignment Notification</h2>
+<p>Hello <strong>{{ recipient_name }}</strong>,</p>
+<p>Ticket <strong>{{ ticket.ticket_number }}</strong> has been assigned to technician <strong>{{ technician.display_name }}</strong>.</p>
+
+<div class="ticket-card">
+    <div class="ticket-row">
+        <span class="ticket-label">Ticket ID:</span>
+        <span class="ticket-val">{{ ticket.ticket_number }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Issue:</span>
+        <span class="ticket-val">{{ ticket.title }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Assigned Technician:</span>
+        <span class="ticket-val"><strong>{{ technician.display_name }}</strong> ({{ technician.employee_id }})</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Specialization:</span>
+        <span class="ticket-val">{{ technician.technician_profile.specialization|default:"General Maintenance" }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Priority:</span>
+        <span class="ticket-val"><span class="badge {{ ticket.priority.badge_class }}">{{ ticket.priority.name }}</span></span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Target SLA:</span>
+        <span class="ticket-val">{{ ticket.due_at|date:"d M Y, H:i" }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Current Status:</span>
+        <span class="ticket-val">{{ ticket.get_status_display }}</span>
+    </div>
+</div>
+
+{% if notes %}
+<p><strong>Assignment Notes:</strong> {{ notes }}</p>
+{% endif %}
+
+<a href="{{ ticket_url }}" class="btn-action">Open & Accept Assignment</a>
+{% endblock %}

@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}HR & Helpdesk Central Desk - JK Paper Mill{% endblock %}
+
+{% block content %}
+<div class="card-header-flex">
+    <div>
+        <h1 style="font-size: 20px; font-weight: 800;">Helpdesk & Triage Radar</h1>
+        <p class="card-subtitle">Review incoming organizational issues, assign maintenance specialists, and track SLAs</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <a href="{% url 'ticket_list' %}?status=NEW" class="btn btn-warning">
+            <i class="bi bi-person-plus-fill"></i> Assign New Tickets ({{ new_count }})
+        </a>
+        <a href="{% url 'report_dashboard' %}" class="btn btn-secondary">
+            <i class="bi bi-file-earmark-bar-graph"></i> View Reports
+        </a>
+    </div>
+</div>
+
+<!-- Metrics Radar -->
+<div class="metrics-grid">
+    <div class="metric-card card-warning">
+        <div class="metric-data">
+            <h3>{{ new_count }}</h3>
+            <p>New / Unassigned</p>
+        </div>
+        <div class="metric-icon icon-warning">
+            <i class="bi bi-inbox-fill"></i>
+        </div>
+    </div>
+    <div class="metric-card card-info">
+        <div class="metric-data">
+            <h3>{{ assigned_count }}</h3>
+            <p>Assigned / Active</p>
+        </div>
+        <div class="metric-icon icon-info">
+            <i class="bi bi-tools"></i>
+        </div>
+    </div>
+    <div class="metric-card card-danger">
+        <div class="metric-data">
+            <h3>{{ escalated_count }}</h3>
+            <p>Escalated (SLA)</p>
+        </div>
+        <div class="metric-icon icon-danger">
+            <i class="bi bi-lightning-charge-fill"></i>
+        </div>
+    </div>
+    <div class="metric-card card-success">
+        <div class="metric-data">
+            <h3>{{ resolved_today }}</h3>
+            <p>Resolved Today</p>
+        </div>
+        <div class="metric-icon icon-success">
+            <i class="bi bi-check2-circle"></i>
+        </div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 24px;">
+    <!-- Recent Incoming Tickets -->
+    <div class="card-box" style="margin-bottom: 0;">
+        <div class="card-header-flex">
+            <div>
+                <h2 class="card-title">Incoming Support Tickets</h2>
+                <p class="card-subtitle">Tickets recently submitted across plant departments</p>
+            </div>
+            <a href="{% url 'ticket_list' %}" class="btn btn-sm btn-secondary">All Tickets</a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Ticket ID</th>
+                        <th>Issue</th>
+                        <th>Dept</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Technician</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in recent_tickets %}
+                    <tr>
+                        <td><strong>{{ t.ticket_number }}</strong></td>
+                        <td>
+                            <div style="font-weight: 600;">{{ t.title|truncatechars:35 }}</div>
+                            <small class="text-muted">By {{ t.created_by.display_name }}</small>
+                        </td>
+                        <td><span class="badge badge-light">{{ t.department.code }}</span></td>
+                        <td><span class="badge {{ t.priority_badge_class }}">{{ t.priority.name }}</span></td>
+                        <td><span class="badge {{ t.status_badge_class }}">{{ t.get_status_display }}</span></td>
+                        <td>{{ t.assigned_to.display_name|default:"Unassigned" }}</td>
+                        <td>
+                            {% if not t.assigned_to or t.status == 'NEW' %}
+                            <a href="{% url 'ticket_assign' t.ticket_number %}" class="btn btn-sm btn-primary">
+                                Assign
+                            </a>
+                            {% else %}
+                            <a href="{% url 'ticket_detail' t.ticket_number %}" class="btn btn-sm btn-secondary">
+                                View
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 30px;" class="text-muted">
+                            No tickets currently in queue.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Technician Availability & Workload Card -->
+    <div class="card-box" style="margin-bottom: 0;">
+        <div class="card-header-flex">
+            <div>
+                <h2 class="card-title">Technician Radar</h2>
+                <p class="card-subtitle">Active load balancing</p>
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            {% for tech in technicians %}
+            <div style="padding: 12px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; background: #fafafa;">
+                <div>
+                    <div style="font-weight: 700; font-size: 13.5px;">{{ tech.user.display_name }}</div>
+                    <small class="text-muted">{{ tech.specialization|default:"General Maintenance"|truncatechars:28 }}</small>
+                </div>
+                <div style="text-align: right;">
+                    <span class="badge {% if tech.current_workload >= 4 %}badge-danger{% elif tech.current_workload > 0 %}badge-warning{% else %}badge-success{% endif %}">
+                        {{ tech.workload_status }}
+                    </span>
+                    <div style="font-size: 11px; color: var(--text-light); margin-top: 2px;">
+                        Active: {{ tech.current_workload }}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-muted" style="font-size: 13px;">No technicians configured yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

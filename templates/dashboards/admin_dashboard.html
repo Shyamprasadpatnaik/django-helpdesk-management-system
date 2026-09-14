@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block title %}Executive Administration Dashboard - JK Paper Mill{% endblock %}
+
+{% block content %}
+<div class="card-header-flex">
+    <div>
+        <h1 style="font-size: 20px; font-weight: 800;">Enterprise Command & Governance</h1>
+        <p class="card-subtitle">Organization-wide ticketing metrics, department health, technician allocations, and SLA compliance</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <a href="{% url 'report_dashboard' %}" class="btn btn-secondary">
+            <i class="bi bi-file-earmark-spreadsheet"></i> Analytics & Exports
+        </a>
+        <a href="/admin/" target="_blank" class="btn btn-primary">
+            <i class="bi bi-gear-fill"></i> System Admin Console
+        </a>
+    </div>
+</div>
+
+<!-- Primary KPIs -->
+<div class="metrics-grid">
+    <div class="metric-card card-primary">
+        <div class="metric-data">
+            <h3>{{ total_tickets }}</h3>
+            <p>Total Tickets</p>
+        </div>
+        <div class="metric-icon">
+            <i class="bi bi-ticket-perforated-fill"></i>
+        </div>
+    </div>
+    <div class="metric-card card-warning">
+        <div class="metric-data">
+            <h3>{{ open_tickets }}</h3>
+            <p>Active Issues</p>
+        </div>
+        <div class="metric-icon icon-warning">
+            <i class="bi bi-clock-history"></i>
+        </div>
+    </div>
+    <div class="metric-card card-danger">
+        <div class="metric-data">
+            <h3>{{ critical_tickets }}</h3>
+            <p>Critical Priority</p>
+        </div>
+        <div class="metric-icon icon-danger">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+        </div>
+    </div>
+    <div class="metric-card card-danger">
+        <div class="metric-data">
+            <h3>{{ sla_breached_count }}</h3>
+            <p>SLA Breached</p>
+        </div>
+        <div class="metric-icon icon-danger">
+            <i class="bi bi-lightning-charge-fill"></i>
+        </div>
+    </div>
+    <div class="metric-card card-success">
+        <div class="metric-data">
+            <h3>{{ resolved_tickets }}</h3>
+            <p>Resolved</p>
+        </div>
+        <div class="metric-icon icon-success">
+            <i class="bi bi-check-circle-fill"></i>
+        </div>
+    </div>
+    <div class="metric-card card-info">
+        <div class="metric-data">
+            <h3>{{ total_employees }}</h3>
+            <p>Total Staff</p>
+        </div>
+        <div class="metric-icon icon-info">
+            <i class="bi bi-people-fill"></i>
+        </div>
+    </div>
+</div>
+
+<!-- Analytics Charts Section -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 28px;">
+    <!-- Chart 1: Department Distribution -->
+    <div class="card-box" style="margin-bottom: 0;">
+        <div class="card-header-flex">
+            <div>
+                <h2 class="card-title">Tickets by Department</h2>
+                <p class="card-subtitle">Volume of reports across organizational units</p>
+            </div>
+        </div>
+        <div style="height: 260px; position: relative;">
+            <canvas id="deptChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Chart 2: Priority Breakdown -->
+    <div class="card-box" style="margin-bottom: 0;">
+        <div class="card-header-flex">
+            <div>
+                <h2 class="card-title">Priority Ratio</h2>
+                <p class="card-subtitle">Severity segmentation</p>
+            </div>
+        </div>
+        <div style="height: 260px; position: relative;">
+            <canvas id="priorityChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Technician Allocation & Workload Radar -->
+<div class="card-box">
+    <div class="card-header-flex">
+        <div>
+            <h2 class="card-title">Technician Workload & Department Allocation</h2>
+            <p class="card-subtitle">Real-time capacity tracking across maintenance disciplines</p>
+        </div>
+        <a href="{% url 'user_list' %}?role=TECHNICIAN" class="btn btn-sm btn-secondary">Manage Technicians</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Technician Name</th>
+                    <th>Emp ID</th>
+                    <th>Specialization Discipline</th>
+                    <th>Authorized Departments</th>
+                    <th>Active Load</th>
+                    <th>Workload Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tech in technicians %}
+                <tr>
+                    <td>
+                        <strong>{{ tech.user.display_name }}</strong>
+                        <div style="font-size: 11px; color: var(--text-muted);">{{ tech.user.email }}</div>
+                    </td>
+                    <td>{{ tech.user.employee_id }}</td>
+                    <td>{{ tech.specialization|default:"General Plant Repairs" }}</td>
+                    <td>
+                        {% for d in tech.departments.all %}
+                        <span class="badge badge-light" style="font-size: 10px;">{{ d.code }}</span>
+                        {% empty %}
+                        <span class="text-muted" style="font-size: 11px;">All</span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <strong>{{ tech.current_workload }}</strong> tickets active
+                    </td>
+                    <td>
+                        <span class="badge {% if tech.current_workload >= 4 %}badge-danger{% elif tech.current_workload > 0 %}badge-warning{% else %}badge-success{% endif %}">
+                            {{ tech.workload_status }}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 24px;" class="text-muted">No technicians found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Script to render Chart.js -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Department Bar Chart
+    const deptCtx = document.getElementById('deptChart').getContext('2d');
+    const deptLabels = [{% for d in dept_distribution %}'{{ d.name }}',{% endfor %}];
+    const deptData = [{% for d in dept_distribution %}{{ d.t_count }},{% endfor %}];
+
+    new Chart(deptCtx, {
+        type: 'bar',
+        data: {
+            labels: deptLabels.length ? deptLabels : ['Production', 'IT', 'Maintenance', 'Electrical', 'HR'],
+            datasets: [{
+                label: 'Tickets',
+                data: deptData.length ? deptData : [12, 8, 15, 6, 4],
+                backgroundColor: '#0284c7',
+                borderRadius: 6,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // 2. Priority Donut Chart
+    const prioCtx = document.getElementById('priorityChart').getContext('2d');
+    const prioLabels = [{% for p in priority_distribution %}'{{ p.priority__name }}',{% endfor %}];
+    const prioData = [{% for p in priority_distribution %}{{ p.count }},{% endfor %}];
+
+    new Chart(prioCtx, {
+        type: 'doughnut',
+        data: {
+            labels: prioLabels.length ? prioLabels : ['Critical', 'High', 'Medium', 'Low'],
+            datasets: [{
+                data: prioData.length ? prioData : [2, 5, 8, 10],
+                backgroundColor: ['#ef4444', '#f97316', '#eab308', '#3b82f6'],
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+            },
+            cutout: '70%'
+        }
+    });
+});
+</script>
+{% endblock %}

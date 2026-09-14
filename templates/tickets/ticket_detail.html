@@ -1,0 +1,351 @@
+{% extends "base.html" %}
+
+{% block title %}{{ ticket.ticket_number }} - {{ ticket.title }}{% endblock %}
+
+{% block content %}
+<!-- Top Header Banner -->
+<div class="card-box" style="padding: 20px 24px; margin-bottom: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px;">
+        <div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                <h1 style="font-size: 20px; font-weight: 800; color: var(--text-main); margin: 0;">
+                    {{ ticket.ticket_number }}
+                </h1>
+                <span class="badge {{ ticket.status_badge_class }}" style="font-size: 12px; padding: 5px 12px;">
+                    {{ ticket.get_status_display }}
+                </span>
+                <span class="badge {{ ticket.priority_badge_class }}" style="font-size: 12px; padding: 5px 12px;">
+                    {{ ticket.priority.name }}
+                </span>
+                {% if ticket.sla_breached %}
+                <span class="badge badge-danger" style="font-size: 11px; padding: 4px 10px;">
+                    <i class="bi bi-exclamation-octagon-fill"></i> SLA BREACHED (Level {{ ticket.escalation_level }})
+                </span>
+                {% endif %}
+            </div>
+            <h2 style="font-size: 16px; font-weight: 600; color: var(--secondary);">
+                {{ ticket.title }}
+            </h2>
+        </div>
+
+        <!-- Action Control Buttons -->
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            {% if can_assign %}
+            <a href="{% url 'ticket_assign' ticket.ticket_number %}" class="btn btn-warning">
+                <i class="bi bi-person-gear"></i> {% if ticket.assigned_to %}Reassign{% else %}Assign{% endif %} Technician
+            </a>
+            {% endif %}
+
+            {% if can_accept %}
+            <a href="{% url 'ticket_accept' ticket.ticket_number %}" class="btn btn-primary" onclick="return confirm('Accept this assignment and mark In Progress?');">
+                <i class="bi bi-play-circle-fill"></i> Accept & Start Work
+            </a>
+            {% endif %}
+
+            {% if can_resolve and ticket.status != 'RESOLVED' and ticket.status != 'CLOSED' %}
+            <button type="button" class="btn btn-success" onclick="document.getElementById('resolve-modal').style.display = 'flex';">
+                <i class="bi bi-check2-circle"></i> Mark Work Completed
+            </button>
+            {% endif %}
+
+            {% if can_confirm %}
+            <a href="{% url 'ticket_confirm' ticket.ticket_number %}" class="btn btn-success" onclick="return confirm('Confirm resolution and close this ticket?');">
+                <i class="bi bi-shield-check"></i> Confirm Resolution
+            </a>
+            <button type="button" class="btn btn-danger" onclick="document.getElementById('reopen-modal').style.display = 'flex';">
+                <i class="bi bi-arrow-counterclockwise"></i> Reopen Ticket
+            </button>
+            {% elif can_reopen and ticket.status == 'CLOSED' %}
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('reopen-modal').style.display = 'flex';">
+                <i class="bi bi-arrow-counterclockwise"></i> Reopen Ticket
+            </button>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Main 2-Column Grid -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+    <!-- Left Column: Details, Timeline, Conversation -->
+    <div>
+        <!-- Problem Description Card -->
+        <div class="card-box">
+            <h3 style="font-size: 14px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">
+                Problem Details
+            </h3>
+            <p style="font-size: 14.5px; line-height: 1.6; color: var(--text-main); white-space: pre-line;">{{ ticket.description }}</p>
+
+            {% if ticket.resolution_summary %}
+            <div style="margin-top: 18px; padding: 16px; background: #f0fdf4; border-left: 4px solid var(--success); border-radius: var(--radius-sm);">
+                <div style="font-size: 12.5px; font-weight: 700; color: #166534; text-transform: uppercase;">
+                    <i class="bi bi-check-circle"></i> Technician Resolution Summary
+                </div>
+                <p style="font-size: 13.5px; color: #15803d; margin-top: 4px;">
+                    {{ ticket.resolution_summary }}
+                </p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Attachments & Photo Proofs -->
+        {% if attachments %}
+        <div class="card-box">
+            <h3 style="font-size: 14px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px;">
+                Uploaded Attachments & Photographs ({{ attachments.count }})
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;">
+                {% for att in attachments %}
+                <div style="border: 1px solid var(--border-color); border-radius: var(--radius-sm); overflow: hidden; background: #fafafa;">
+                    {% if att.is_image %}
+                    <a href="{{ att.file.url }}" target="_blank">
+                        <img src="{{ att.file.url }}" alt="Attachment" style="width: 100%; height: 130px; object-fit: cover;">
+                    </a>
+                    {% else %}
+                    <div style="height: 130px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; font-size: 40px; color: var(--primary);">
+                        <i class="bi bi-file-earmark-text"></i>
+                    </div>
+                    {% endif %}
+                    <div style="padding: 10px;">
+                        {% if att.is_resolution_proof %}
+                        <span class="badge badge-success" style="font-size: 9px; margin-bottom: 4px;">Resolution Proof</span>
+                        {% endif %}
+                        <div style="font-size: 12px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            <a href="{{ att.file.url }}" target="_blank">{{ att.file.name|slice:"19:"|default:att.file.name }}</a>
+                        </div>
+                        <small class="text-muted" style="font-size: 10.5px;">By {{ att.uploaded_by.display_name }}</small>
+                        {% if att.ocr_extracted_text %}
+                        <div style="margin-top: 6px; font-size: 11px; background: #ffffff; padding: 6px; border: 1px solid var(--border-color); border-radius: 4px; max-height: 60px; overflow-y: auto;">
+                            <strong>OCR Extracted:</strong> {{ att.ocr_extracted_text }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Ticket Conversation Thread -->
+        <div class="card-box">
+            <h3 style="font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 16px;">
+                Ticket Communication History
+            </h3>
+
+            <!-- Messages Stream -->
+            <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px;">
+                {% for comment in comments %}
+                <div style="display: flex; gap: 12px; {% if comment.is_internal %}background: #fffbeb; border: 1px dashed var(--warning-border); padding: 14px; border-radius: var(--radius-sm);{% endif %}">
+                    <div class="user-avatar-sm" style="flex-shrink: 0;">
+                        {{ comment.author.first_name|first|default:comment.author.username|first|upper }}
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                            <strong style="font-size: 13.5px;">{{ comment.author.display_name }}</strong>
+                            <span class="badge {{ comment.author.role_badge_class }}" style="font-size: 9px;">
+                                {{ comment.author.get_role_display }}
+                            </span>
+                            {% if comment.is_internal %}
+                            <span class="badge badge-warning" style="font-size: 9px;">Internal Staff Note</span>
+                            {% endif %}
+                            <span style="font-size: 11.5px; color: var(--text-light); margin-left: auto;">
+                                {{ comment.created_at|date:"d M Y, H:i" }}
+                            </span>
+                        </div>
+                        <div style="font-size: 13.5px; line-height: 1.5; color: var(--text-main); background: #f8fafc; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color-light);">
+                            {{ comment.comment|linebreaksbr }}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted" style="font-size: 13px; font-style: italic; text-align: center; padding: 16px;">
+                    No messages recorded yet on this ticket.
+                </p>
+                {% endfor %}
+            </div>
+
+            <!-- Post New Comment Form -->
+            <form method="POST" action="{% url 'ticket_comment_add' ticket.ticket_number %}" enctype="multipart/form-data" style="border-top: 1px solid var(--border-color); padding-top: 18px;">
+                {% csrf_token %}
+                <div style="margin-bottom: 12px;">
+                    {{ comment_form.comment }}
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                        <div>
+                            <label style="font-size: 12px; font-weight: 600;">Attach File:</label>
+                            {{ comment_form.attachment }}
+                        </div>
+                        {% if request.user.is_hr_admin or request.user.is_technician or request.user.is_super_admin %}
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            {{ comment_form.is_internal }}
+                            <label for="id_is_internal" style="font-size: 12px; font-weight: 600; color: var(--warning); cursor: pointer;">
+                                Internal Note (Hidden from employee)
+                            </label>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-send-fill"></i> Post Message
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Right Column: Sidebar Metadata & Interactive Vertical Timeline -->
+    <div>
+        <!-- SLA & Status Card -->
+        <div class="card-box">
+            <h3 style="font-size: 14px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px;">
+                SLA Performance
+            </h3>
+            
+            <div style="margin-bottom: 14px;">
+                <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                    <span>SLA Timeline Elapsed</span>
+                    <span>{{ ticket.sla_percentage_elapsed }}%</span>
+                </div>
+                <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: var(--radius-full); overflow: hidden;">
+                    <div style="width: {{ ticket.sla_percentage_elapsed }}%; height: 100%; background: {% if ticket.sla_breached %}var(--danger){% elif ticket.sla_percentage_elapsed >= 75 %}var(--warning){% else %}var(--primary){% endif %};"></div>
+                </div>
+            </div>
+
+            <div style="font-size: 13px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span class="text-muted">Reported:</span>
+                    <strong>{{ ticket.created_at|date:"d M, H:i" }}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span class="text-muted">Target SLA Due:</span>
+                    <strong>{{ ticket.due_at|date:"d M, H:i"|default:"N/A" }}</strong>
+                </div>
+                {% if ticket.resolved_at %}
+                <div style="display: flex; justify-content: space-between;">
+                    <span class="text-muted">Resolved At:</span>
+                    <strong class="text-success">{{ ticket.resolved_at|date:"d M, H:i" }}</strong>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Metadata Attributes Card -->
+        <div class="card-box">
+            <h3 style="font-size: 14px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px;">
+                Ticket Attributes
+            </h3>
+            <div style="font-size: 13px; display: flex; flex-direction: column; gap: 10px;">
+                <div>
+                    <span class="text-muted" style="display: block; font-size: 11px;">Department:</span>
+                    <strong>{{ ticket.department.name }}</strong>
+                </div>
+                <div>
+                    <span class="text-muted" style="display: block; font-size: 11px;">Category:</span>
+                    <strong>{{ ticket.category.name|default:"General Issue" }}</strong>
+                </div>
+                <div>
+                    <span class="text-muted" style="display: block; font-size: 11px;">Plant Location:</span>
+                    <strong>{{ ticket.building|default:"Plant Main" }} {% if ticket.floor %}(Floor: {{ ticket.floor }}){% endif %}</strong>
+                    {% if ticket.room_area %}<div>{{ ticket.room_area }}</div>{% endif %}
+                </div>
+                {% if ticket.equipment_number %}
+                <div>
+                    <span class="text-muted" style="display: block; font-size: 11px;">Machine / Equipment ID:</span>
+                    <span class="badge badge-light" style="font-size: 12px; font-family: monospace;">{{ ticket.equipment_number }}</span>
+                </div>
+                {% endif %}
+                <hr style="border: none; border-top: 1px solid var(--border-color); margin: 6px 0;">
+                <div>
+                    <span class="text-muted" style="display: block; font-size: 11px;">Reporting Employee:</span>
+                    <strong>{{ ticket.created_by.display_name }}</strong> ({{ ticket.created_by.employee_id }})
+                    <div style="font-size: 11.5px; color: var(--text-muted);"><i class="bi bi-telephone"></i> {{ ticket.created_by.phone|default:"No phone" }}</div>
+                </div>
+                <div>
+                    <span class="text-muted" style="display: block; font-size: 11px;">Assigned Technician:</span>
+                    {% if ticket.assigned_to %}
+                    <strong>{{ ticket.assigned_to.display_name }}</strong> ({{ ticket.assigned_to.employee_id }})
+                    <div style="font-size: 11.5px; color: var(--text-muted);"><i class="bi bi-tools"></i> {{ ticket.assigned_to.technician_profile.specialization|default:"Maintenance" }}</div>
+                    {% else %}
+                    <span class="text-warning" style="font-weight: 600;">Unassigned (Awaiting HR)</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Vertical Workflow Timeline -->
+        <div class="card-box">
+            <h3 style="font-size: 14px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px;">
+                Lifecycle Timeline
+            </h3>
+
+            <div class="timeline">
+                {% for h in history %}
+                <div class="timeline-item">
+                    <div class="timeline-marker done"></div>
+                    <div class="timeline-content">
+                        <h5>{{ h.action }}</h5>
+                        <p>{{ h.details }}</p>
+                        <span class="timeline-time">{{ h.timestamp|date:"d M, H:i" }}</span>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="timeline-item">
+                    <div class="timeline-marker done"></div>
+                    <div class="timeline-content">
+                        <h5>Ticket Created</h5>
+                        <span class="timeline-time">{{ ticket.created_at|date:"d M, H:i" }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Mark Resolved (Technician) -->
+<div id="resolve-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: var(--radius-md); padding: 28px; width: 100%; max-width: 520px; box-shadow: var(--shadow-lg);">
+        <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">Mark Work Completed</h3>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">
+            Document the work performed. The employee will receive a notification to verify and confirm resolution.
+        </p>
+
+        <form method="POST" action="{% url 'ticket_resolve' ticket.ticket_number %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div style="margin-bottom: 16px;">
+                <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px;">Resolution Summary *</label>
+                {{ resolve_form.resolution_summary }}
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px;">Resolution Proof Photo (Before/After)</label>
+                {{ resolve_form.proof_image }}
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('resolve-modal').style.display = 'none';">Cancel</button>
+                <button type="submit" class="btn btn-success"><i class="bi bi-check2"></i> Submit & Mark Resolved</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Reopen Ticket (Employee) -->
+<div id="reopen-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: var(--radius-md); padding: 28px; width: 100%; max-width: 500px; box-shadow: var(--shadow-lg);">
+        <h3 style="font-size: 18px; font-weight: 800; color: var(--danger); margin-bottom: 8px;">Reopen Ticket</h3>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">
+            If the problem persists or the repair was incomplete, explain what went wrong to return the ticket to HR review.
+        </p>
+
+        <form method="POST" action="{% url 'ticket_reopen' ticket.ticket_number %}">
+            {% csrf_token %}
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px;">Reason for Reopening *</label>
+                {{ reopen_form.reopen_reason }}
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('reopen-modal').style.display = 'none';">Cancel</button>
+                <button type="submit" class="btn btn-danger"><i class="bi bi-arrow-counterclockwise"></i> Reopen Ticket</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

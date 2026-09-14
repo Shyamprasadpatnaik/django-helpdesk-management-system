@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}{{ department.name }} - JK Paper Mill{% endblock %}
+
+{% block content %}
+<div class="card-header-flex">
+    <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+            <h1 style="font-size: 20px; font-weight: 800;">{{ department.name }}</h1>
+            <span class="badge badge-primary">{{ department.code }}</span>
+        </div>
+        <p class="card-subtitle">{{ department.description|default:"Industrial operations and support section." }}</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <a href="{% url 'ticket_create' %}?dept={{ department.code }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Open Ticket in this Dept
+        </a>
+        <a href="{% url 'department_list' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> All Departments
+        </a>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+    <!-- Left: Department Tickets -->
+    <div>
+        <div class="card-box">
+            <div class="card-header-flex">
+                <div>
+                    <h2 class="card-title">Recent Department Tickets</h2>
+                    <p class="card-subtitle">Active and resolved issues submitted to {{ department.name }}</p>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Title</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Technician</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in tickets %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'ticket_detail' t.ticket_number %}" style="font-weight: 700;">
+                                    {{ t.ticket_number }}
+                                </a>
+                            </td>
+                            <td>{{ t.title|truncatechars:40 }}</td>
+                            <td><span class="badge {{ t.priority_badge_class }}">{{ t.priority.name }}</span></td>
+                            <td><span class="badge {{ t.status_badge_class }}">{{ t.get_status_display }}</span></td>
+                            <td>{{ t.assigned_to.display_name|default:"Unassigned" }}</td>
+                            <td>{{ t.created_at|date:"d M Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 30px;" class="text-muted">
+                                No tickets currently logged for this department.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right: Department Info & Categories -->
+    <div>
+        <div class="card-box">
+            <h3 style="font-size: 14px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px;">
+                Department Information
+            </h3>
+            <div style="font-size: 13px; display: flex; flex-direction: column; gap: 10px;">
+                <div>
+                    <span class="text-muted" style="display: block; font-size: 11px;">Designated Manager:</span>
+                    <strong>{{ department.manager.display_name|default:"Not Assigned" }}</strong>
+                    {% if department.manager %}
+                    <div style="font-size: 11.5px; color: var(--text-muted);">{{ department.manager.email }}</div>
+                    {% endif %}
+                </div>
+                <div>
+                    <span class="text-muted" style="display: block; font-size: 11px;">Active Workload:</span>
+                    <strong>{{ department.open_tickets_count }}</strong> open tickets
+                </div>
+            </div>
+        </div>
+
+        <div class="card-box">
+            <h3 style="font-size: 14px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px;">
+                Configured Issue Categories
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px;">
+                {% for cat in categories %}
+                <li style="padding: 8px 12px; background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 13px; display: flex; align-items: center; gap: 8px;">
+                    <i class="bi bi-tag-fill text-primary" style="font-size: 12px;"></i>
+                    <span>{{ cat.name }}</span>
+                </li>
+                {% empty %}
+                <li class="text-muted" style="font-size: 13px;">No categories configured.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

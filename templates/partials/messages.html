@@ -1,0 +1,14 @@
+{% if messages %}
+<div class="messages-wrapper" style="margin-bottom: 20px;">
+    {% for message in messages %}
+    <div class="alert alert-dismissible {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% elif message.tags == 'warning' %}alert-warning{% else %}alert-info{% endif %}" 
+         style="padding: 12px 18px; border-radius: var(--radius-sm); margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; font-size: 13.5px; font-weight: 500; box-shadow: var(--shadow-sm); border: 1px solid transparent; {% if message.tags == 'error' %}background: var(--danger-light); color: var(--danger); border-color: var(--danger-border);{% elif message.tags == 'success' %}background: var(--success-light); color: var(--success); border-color: var(--success-border);{% elif message.tags == 'warning' %}background: var(--warning-light); color: var(--warning); border-color: var(--warning-border);{% else %}background: var(--info-light); color: var(--info); border-color: var(--info-border);{% endif %}">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="bi {% if message.tags == 'error' %}bi-x-circle-fill{% elif message.tags == 'success' %}bi-check-circle-fill{% elif message.tags == 'warning' %}bi-exclamation-triangle-fill{% else %}bi-info-circle-fill{% endif %}" style="font-size: 16px;"></i>
+            <span>{{ message }}</span>
+        </div>
+        <button type="button" onclick="this.parentElement.remove()" style="background: none; border: none; font-size: 18px; line-height: 1; cursor: pointer; color: inherit; opacity: 0.7;">&times;</button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}

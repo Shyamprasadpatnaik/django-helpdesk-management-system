@@ -1,0 +1,46 @@
+{% extends "emails/base_email.html" %}
+
+{% block content %}
+<h2>Ticket Created: {{ ticket.ticket_number }}</h2>
+<p>Hello <strong>{{ recipient_name }}</strong>,</p>
+<p>A new ticket has been submitted into the {{ company_name }} Ticket Management System.</p>
+
+<div class="ticket-card">
+    <div class="ticket-row">
+        <span class="ticket-label">Ticket ID:</span>
+        <span class="ticket-val"><strong>{{ ticket.ticket_number }}</strong></span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Issue Title:</span>
+        <span class="ticket-val">{{ ticket.title }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Department:</span>
+        <span class="ticket-val">{{ ticket.department.name }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Category:</span>
+        <span class="ticket-val">{{ ticket.category.name|default:"General" }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Priority:</span>
+        <span class="ticket-val"><span class="badge {{ ticket.priority.badge_class }}">{{ ticket.priority.name }}</span></span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Target SLA:</span>
+        <span class="ticket-val">{{ ticket.due_at|date:"d M Y, H:i"|default:"Calculated dynamically" }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Reported By:</span>
+        <span class="ticket-val">{{ ticket.created_by.display_name }} ({{ ticket.created_by.employee_id }})</span>
+    </div>
+</div>
+
+<p><strong>Description:</strong><br>{{ ticket.description|linebreaksbr }}</p>
+
+{% if ticket.building %}
+<p><strong>Location:</strong> {{ ticket.building }} | Floor: {{ ticket.floor|default:"N/A" }} | Room/Area: {{ ticket.room_area|default:"N/A" }} {% if ticket.equipment_number %}| Machine/Equip: {{ ticket.equipment_number }}{% endif %}</p>
+{% endif %}
+
+<a href="{{ ticket_url }}" class="btn-action">View Ticket Details</a>
+{% endblock %}

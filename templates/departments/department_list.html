@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Departments Directory - JK Paper Mill{% endblock %}
+
+{% block content %}
+<div class="card-header-flex">
+    <div>
+        <h1 style="font-size: 20px; font-weight: 800;">Plant & Corporate Departments</h1>
+        <p class="card-subtitle">Organizational operational units, designated department heads, and active ticket volumes</p>
+    </div>
+    {% if request.user.is_super_admin %}
+    <a href="/admin/departments/department/add/" target="_blank" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> Add Department
+    </a>
+    {% endif %}
+</div>
+
+<!-- Department Cards Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+    {% for dept in departments %}
+    <div class="card-box" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                <span class="badge badge-primary" style="font-size: 11px; padding: 4px 8px;">{{ dept.code }}</span>
+                {% if dept.open_tickets_count > 0 %}
+                <span class="badge badge-warning" style="font-size: 10.5px;">{{ dept.open_tickets_count }} Open</span>
+                {% else %}
+                <span class="badge badge-success" style="font-size: 10.5px;">All Clear</span>
+                {% endif %}
+            </div>
+            <h3 style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">
+                <a href="{% url 'department_detail' dept.id %}">{{ dept.name }}</a>
+            </h3>
+            <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.4; margin-bottom: 14px;">
+                {{ dept.description|truncatechars:90|default:"Plant operations and facility services." }}
+            </p>
+        </div>
+
+        <div style="border-top: 1px solid var(--border-color-light); padding-top: 12px; font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <i class="bi bi-person-badge"></i> Head: 
+                <strong>{{ dept.manager.display_name|default:"Unassigned" }}</strong>
+            </div>
+            <a href="{% url 'department_detail' dept.id %}" class="btn btn-sm btn-secondary" style="padding: 4px 10px; font-size: 11px;">
+                View
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

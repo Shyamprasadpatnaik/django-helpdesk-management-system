@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Access Denied - JK Paper Mill{% endblock %}
+
+{% block content %}
+<div class="card-box" style="text-align: center; padding: 60px 20px; max-width: 600px; margin: 40px auto;">
+    <div style="font-size: 64px; color: var(--danger); margin-bottom: 16px;">
+        <i class="bi bi-shield-lock-fill"></i>
+    </div>
+    <h2 style="font-size: 24px; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">403 - Access Denied</h2>
+    <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">
+        You do not possess the required role permissions to access this departmental area or administrative action.
+    </p>
+    <a href="{% url 'dashboard' %}" class="btn btn-primary">
+        <i class="bi bi-house-door-fill"></i> Return to Your Dashboard
+    </a>
+</div>
+{% endblock %}

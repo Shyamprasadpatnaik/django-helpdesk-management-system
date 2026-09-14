@@ -1,0 +1,31 @@
+{% extends "emails/base_email.html" %}
+
+{% block content %}
+<h2>Work Completed & Ticket Resolved</h2>
+<p>Hello <strong>{{ recipient_name }}</strong>,</p>
+<p>Your ticket <strong>{{ ticket.ticket_number }}</strong> has been marked as <strong>RESOLVED</strong> by technician <strong>{{ ticket.assigned_to.display_name }}</strong>.</p>
+
+<div class="ticket-card">
+    <div class="ticket-row">
+        <span class="ticket-label">Ticket ID:</span>
+        <span class="ticket-val">{{ ticket.ticket_number }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Issue:</span>
+        <span class="ticket-val">{{ ticket.title }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Technician:</span>
+        <span class="ticket-val">{{ ticket.assigned_to.display_name }}</span>
+    </div>
+    <div class="ticket-row">
+        <span class="ticket-label">Resolution Summary:</span>
+        <span class="ticket-val">{{ ticket.resolution_summary }}</span>
+    </div>
+</div>
+
+<p><strong>Action Required from Employee:</strong><br>
+Please verify the machine/issue resolution. Log in to either <strong>Confirm Resolution</strong> to close the ticket or <strong>Reopen Ticket</strong> if the problem persists.</p>
+
+<a href="{{ ticket_url }}" class="btn-action">Confirm Resolution / Reopen Ticket</a>
+{% endblock %}
